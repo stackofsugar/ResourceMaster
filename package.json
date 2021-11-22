@@ -1,0 +1,20 @@
+{
+  "name": "ResourceMaster",
+  "version": "1.0.0",
+  "description": "Aplikasi berbasis Electron untuk melakukan manajemen dan inventarisasi Sumber Daya Alam Indonesia - Final Project DBMS Informatika UNS 2021",
+  "main": "./src/main.js",
+  "author": "Christopher Digno Mardhika Danneswara",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "electron": "^16.0.1",
+    "electron-builder": "^22.14.5"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "mssql": "^7.3.0",
+    "node-mssql": "^0.0.1"
+  }
+}
