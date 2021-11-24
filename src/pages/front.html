@@ -8,13 +8,23 @@
     </head>
     <body>
         <header>
-            <div class="row" id="title-bar-row">
-                <div class="nav-wrapper" id="title-bar">
-                    <span class="brand-logo center" id="header-logo">
-                        Resource Master
-                    </span>
+            <nav>
+                <div class="nav-wrapper">
+                    <a class="brand-logo center" style="font-size: 15px"
+                        >Resource Master</a
+                    >
+                    <ul id="nav-mobile" class="right no-drag">
+                        <li><a>_</a></li>
+                        <li><a>O</a></li>
+                        <li><a>X</a></li>
+                    </ul>
+                    <ul id="nav-mobile" class="left no-drag">
+                        <li><a>File</a></li>
+                        <li><a>Settings</a></li>
+                        <li><a>SQL</a></li>
+                    </ul>
                 </div>
-            </div>
+            </nav>
         </header>
 
         <div id="main-content">
@@ -57,6 +67,11 @@
                         Cras tincidunt id arcu lobortis molestie.
                     </p>
                 </div>
+                <div class="row">
+                    <button type="submit" class="waves-effect waves-light btn">
+                        Please click me here right now oh my goddddd
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -81,6 +96,8 @@
             //         ipcRenderer.send("ipctest:send", payload);
             //     });
         </script>
+        <script src="../styles/materialize.min.js"></script>
+        <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     </body>
 </html>
 

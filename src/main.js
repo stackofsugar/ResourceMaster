@@ -38,9 +38,9 @@ app.on("ready", () => {
     mainWindow.webContents.once("ready-to-show", () => {
         mainWindow.maximize();
         mainWindow.show();
-        const bounds = mainWindow.webContents.getOwnerBrowserWindow().getBounds();
+        const bounds = mainWindow.webContents
+            .getOwnerBrowserWindow()
+            .getBounds();
         console.log(bounds);
     });
 });
-
-///////////////////////// testing zone /////////////////////////////////////////
