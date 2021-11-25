@@ -1,7 +1,9 @@
 const electron = require("electron");
 const sql = require("mssql");
+const panicBox = require("./panicBox.js");
 
 const { app, ipcMain } = electron;
+const { panic } = panicBox;
 
 let mainWindowInstance;
 const sqlServerConnConfig = {
@@ -20,14 +22,9 @@ app.once("browser-window-created", (_, firstWindow) => {
     mainWindowInstance = firstWindow;
 });
 
-ipcMain.on("ipctest:send", (e, payload) => {
-    console.log("From ipcmain invocation on sqlHandler.js: " + payload);
-    mainWindowInstance.blur();
-});
-
 app.once("ready", () => {
     sql.connect(sqlServerConnConfig).catch((err) => {
-        console.log(err);
+        panic(err, "SQL", "An SQL connection cannot be made");
     });
 });
 
@@ -46,7 +43,7 @@ ipcMain.on("sqlquery:send", (e, sqlQueryItem) => {
                 console.log(result);
             })
             .catch((err) => {
-                console.log("Thrown on IPC endpoint: " + err);
+                panic(err, "SQL", "Specified SQL query cannot be run");
             });
     }
 });
@@ -59,9 +56,7 @@ function runSQLQuery(query) {
                     return connpool.request().query(query);
                 },
                 (err) => {
-                    console.log(
-                        "SQL Server connection rejected! Errcode: " + err
-                    );
+                    panic(err, "SQL", "An SQL connection cannot be made (Promise rejected)");
                 }
             )
             .then(
@@ -69,15 +64,15 @@ function runSQLQuery(query) {
                     resolve(result);
                 },
                 (err) => {
-                    console.log("SQL Server request rejected! Errcode: " + err);
+                    panic(err, "SQL", "An SQL Query request is rejected");
                 }
             )
             .catch((err) => {
-                console.log("Thrown in runSQLQuery: " + err.msg);
+                panic(err, "SQL", "SQL run error");
             });
     });
 }
 
 sql.on("error", (err) => {
-    console.log("Thrown by global SQL driver: " + err);
+    panic(err, "SQL", "Global SQL Error");
 });

@@ -2,26 +2,40 @@
 <html lang="en">
     <head>
         <title>Resource Master</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="../styles/appFont.css" />
         <link rel="stylesheet" href="../styles/userstyle.css" />
         <link rel="stylesheet" href="../styles/materialize.min.css" />
     </head>
     <body>
         <header>
-            <nav>
+            <nav class="z-depth-0">
                 <div class="nav-wrapper">
-                    <a class="brand-logo center" style="font-size: 15px"
-                        >Resource Master</a
-                    >
+                    <a class="brand-logo center" style="font-size: 15px">Resource Master</a>
                     <ul id="nav-mobile" class="right no-drag">
-                        <li><a>_</a></li>
-                        <li><a>O</a></li>
-                        <li><a>X</a></li>
+                        <li>
+                            <a id="winmin" class="window-control-wrapper"
+                                ><img src="../../assets/icons/windowControl/minimize.png" class="window-min" alt=""
+                            /></a>
+                        </li>
+                        <li>
+                            <a id="winwdw" class="window-control-wrapper"
+                                ><img src="../../assets/icons/windowControl/window.png" class="window-wdw" alt=""
+                            /></a>
+                        </li>
+                        <li>
+                            <a id="wincls" class="window-control-wrapper"
+                                ><img src="../../assets/icons/windowControl/close.png" class="window-cls" alt=""
+                            /></a>
+                        </li>
                     </ul>
                     <ul id="nav-mobile" class="left no-drag">
-                        <li><a>File</a></li>
-                        <li><a>Settings</a></li>
-                        <li><a>SQL</a></li>
+                        <li id="sm-ico-wrap" class="nav-items"><img id="small-icon" src="../../assets/icons/icon.png" /></li>
+                        <li>
+                            <a id="nav-file" class="nav-items">File</a>
+                        </li>
+                        <li><a id="nav-settings" class="nav-items">Settings</a></li>
+                        <li><a id="nav-sql" class="nav-items">SQL</a></li>
                     </ul>
                 </div>
             </nav>
@@ -30,90 +44,43 @@
         <div id="main-content">
             <div class="container">
                 <div class="row">
-                    <h5 class="center-align" id="subtitle-top">
-                        Halo, selamat datang di
-                    </h5>
+                    <h5 class="center-align" id="subtitle-top">Halo, selamat datang di</h5>
                     <h1 class="center-align" id="app-title">Resource Master</h1>
                 </div>
-                <div
-                    class="row"
-                    style="text-align: justify; color: rgb(193, 193, 193)"
-                >
+                <div class="row" style="text-align: justify; color: rgb(193, 193, 193)">
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nullam at orci id elit luctus suscipit sed at lorem.
-                        Fusce mattis, nisi et dignissim accumsan, diam velit
-                        ultricies eros, et venenatis dolor eros ac tellus.
-                        Vestibulum eget nisi lorem. Nunc rutrum nisl massa, quis
-                        viverra velit fringilla sed. Aenean at magna urna.
-                        Suspendisse in blandit lorem. Aliquam sapien ante,
-                        lobortis non convallis quis, placerat hendrerit lectus.
-                        Nullam placerat erat a lectus ornare viverra. Etiam ac
-                        imperdiet turpis, at vulputate magna.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam at orci id elit luctus suscipit sed at lorem. Fusce mattis,
+                        nisi et dignissim accumsan, diam velit ultricies eros, et venenatis dolor eros ac tellus. Vestibulum eget nisi lorem. Nunc
+                        rutrum nisl massa, quis viverra velit fringilla sed. Aenean at magna urna. Suspendisse in blandit lorem. Aliquam sapien ante,
+                        lobortis non convallis quis, placerat hendrerit lectus. Nullam placerat erat a lectus ornare viverra. Etiam ac imperdiet
+                        turpis, at vulputate magna.
                     </p>
                     <p>
-                        Morbi venenatis dolor vitae commodo semper. Suspendisse
-                        ut hendrerit magna. Fusce orci turpis, mattis vitae orci
-                        in, pellentesque laoreet turpis. Maecenas sed tellus
-                        quis nunc iaculis blandit maximus ut dolor. Suspendisse
-                        in pellentesque libero. Pellentesque a nisl viverra,
-                        placerat odio quis, fermentum mi. In vitae ex non mauris
-                        blandit interdum eget vitae turpis. Curabitur non augue
-                        euismod, fringilla risus at, mattis eros. Quisque nec
-                        urna ut ante accumsan vulputate. Sed placerat risus a
-                        elit consequat tempor. Nulla et dictum nibh, sed commodo
-                        nibh. Fusce nibh turpis, iaculis at ante eu, tempus
-                        elementum mauris. Aenean scelerisque varius ultrices.
-                        Cras tincidunt id arcu lobortis molestie.
+                        Morbi venenatis dolor vitae commodo semper. Suspendisse ut hendrerit magna. Fusce orci turpis, mattis vitae orci in,
+                        pellentesque laoreet turpis. Maecenas sed tellus quis nunc iaculis blandit maximus ut dolor. Suspendisse in pellentesque
+                        libero. Pellentesque a nisl viverra, placerat odio quis, fermentum mi. In vitae ex non mauris blandit interdum eget vitae
+                        turpis. Curabitur non augue euismod, fringilla risus at, mattis eros. Quisque nec urna ut ante accumsan vulputate. Sed
+                        placerat risus a elit consequat tempor. Nulla et dictum nibh, sed commodo nibh. Fusce nibh turpis, iaculis at ante eu, tempus
+                        elementum mauris. Aenean scelerisque varius ultrices. Cras tincidunt id arcu lobortis molestie.
                     </p>
                 </div>
                 <div class="row">
-                    <button type="submit" class="waves-effect waves-light btn">
-                        Please click me here right now oh my goddddd
-                    </button>
+                    <button id="winsize-test" type="submit" class="waves-effect waves-light btn">Try raising an error here</button>
                 </div>
             </div>
         </div>
-
-        <script>
-            // const electron = require("electron");
-            // const { ipcRenderer } = electron;
-
-            // document
-            //     .querySelector("#sqlquery_form")
-            //     .addEventListener("submit", (e) => {
-            //         e.preventDefault();
-            //         const sqlquery = document.querySelector("#sqlquery").value;
-            //         document.querySelector("#sqlquery").value = "";
-            //         ipcRenderer.send("sqlquery:send", sqlquery);
-            //     });
-
-            // document
-            //     .querySelector("#ipcTest")
-            //     .addEventListener("submit", (e) => {
-            //         e.preventDefault;
-            //         const payload = "mengontol";
-            //         ipcRenderer.send("ipctest:send", payload);
-            //     });
-        </script>
-        <script src="../styles/materialize.min.js"></script>
-        <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     </body>
+    <script>
+        // Do these things because electron is stupid https://github.com/electron/electron/issues/254#issuecomment-183483641
+        if (typeof module === "object") {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+    <script src="../../node_modules/jquery/dist/jquery.js" type="text/javascript"></script>
+    <script src="../renderer.js" type="text/javascript"></script>
+    <script src="../styles/materialize.min.js" type="text/javascript"></script>
+    <script>
+        if (window.module) module = window.module;
+    </script>
 </html>
-
-<!-- <div class="row col s12">
-    <form id="sqlquery_form">
-        <div class="input-field">
-            <input type="text" id="sqlquery" />
-            <label for="sqlquery">Masukkan Kueri SQL</label>
-        </div>
-        <div class="row">
-            <button type="submit">Click me hihiw</button>
-        </div>
-    </form>
-</div>
-<div class="row">
-    <form id="ipcTest">
-        <button type="submit">Click to test IPC</button>
-    </form>
-</div> -->

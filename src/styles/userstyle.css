@@ -29,7 +29,7 @@ body {
 }
 
 /* Customize scrollbar */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     width: 12px;
 }
 ::-webkit-scrollbar-track {
@@ -39,13 +39,13 @@ body {
     background-color: #6e6e6e;
     border-radius: 20px;
     border: 3px solid #3e3e3e;
-}
+} */
 
 /* Customize custom title bar */
 nav {
     height: 25px !important;
     line-height: 25px !important;
-    background: #ee82ee !important;
+    background: #1e1e1e !important;
     -webkit-app-region: drag;
 }
 nav i,
@@ -62,6 +62,45 @@ nav .button-collapse i {
 #nav-mobile {
     -webkit-app-region: no-drag;
 }
+.nav-items {
+    /* Default looks too bulky for my liking */
+    font-size: 0.9em;
+    padding: 0px 8px 0px;
+    height: 25px;
+}
+.window-control-wrapper {
+    height: 25px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#small-icon {
+    height: 20px;
+    margin-top: 2px;
+}
+
+/* --Infuriatingly-- customize window control icons */
+.window-min {
+    height: 19px;
+}
+.window-wdw {
+    height: 15px;
+    margin-top: 5px;
+}
+.window-cls {
+    height: 19px;
+    margin-top: 3px;
+}
+
+/* Title bar items hover color */
+nav ul li:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+#wincls:hover {
+    background-color: rgba(255, 0, 0, 0.646) !important;
+}
+#sm-ico-wrap:hover {
+    background-color: #1e1e1e !important;
+}
 
 /* Miscellaneous */
 
@@ -72,4 +111,20 @@ nav .button-collapse i {
 #subtitle-top {
     margin-bottom: 0;
     color: rgb(175, 175, 175);
+}
+
+img {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+a {
+    cursor: default !important;
+}
+
+button {
+    text-transform: unset !important;
 }

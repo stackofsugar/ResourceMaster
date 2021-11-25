@@ -8,20 +8,24 @@
  */
 
 const electron = require("electron");
-const pb = require("./panicBox.js");
+const { type } = require("jquery");
+const panicBox = require("./panicBox.js");
 require("./sqlHandler.js");
 
 const { app, BrowserWindow, Menu, ipcMain, shell } = electron;
-const { panicBox } = pb;
+const { panic } = panicBox;
 
 let mainWindow;
 let errorWindow;
 
+// Main app process
 app.on("ready", () => {
     mainWindow = new BrowserWindow({
         show: false,
         frame: false,
         backgroundColor: "#1E1E1E",
+        minWidth: 950,
+        minHeight: 620,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -38,9 +42,29 @@ app.on("ready", () => {
     mainWindow.webContents.once("ready-to-show", () => {
         mainWindow.maximize();
         mainWindow.show();
-        const bounds = mainWindow.webContents
-            .getOwnerBrowserWindow()
-            .getBounds();
-        console.log(bounds);
     });
+});
+
+// Handle window control buttons
+ipcMain.on("win:cls", () => {
+    mainWindow.close();
+});
+ipcMain.on("win:wdw", () => {
+    if (mainWindow.isMaximized()) {
+        mainWindow.unmaximize();
+    } else {
+        mainWindow.maximize();
+    }
+});
+ipcMain.on("win:min", () => {
+    mainWindow.minimize();
+});
+
+ipcMain.on("win:err-test", () => {
+    try {
+        let testUndefinedFunction = null;
+        testUndefinedFunction.on("close", () => {});
+    } catch (err) {
+        panic(err, "Test", "Uh-oh, you might have something here...");
+    }
 });

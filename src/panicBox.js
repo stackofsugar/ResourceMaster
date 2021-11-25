@@ -1,19 +1,22 @@
 const electron = require("electron");
-const { app, BrowserWindow, shell } = electron;
+const { app, BrowserWindow, shell, ipcMain } = electron;
 
 let mainWindowInstance;
+let errorWindow;
 
 app.once("browser-window-created", (_, firstWindow) => {
     mainWindowInstance = firstWindow;
 });
 
-function createChildishWindow(windowObject, HTMLFile) {
-    windowObject = new BrowserWindow({
-        width: 400,
-        height: 200,
+function createErrorWindow(errStack = "", errType = "", errReason = "") {
+    errorWindow = new BrowserWindow({
+        width: 600,
+        height: 400,
         title: "ERROR!",
         show: false,
         resizable: false,
+        frame: false,
+        backgroundColor: "#1E1E1E",
         parent: mainWindowInstance,
         modal: true,
         webPreferences: {
@@ -22,22 +25,25 @@ function createChildishWindow(windowObject, HTMLFile) {
         },
     });
 
-    windowObject.loadFile(HTMLFile);
+    errorWindow.loadFile("./src/pages/error.html");
 
-    windowObject.webContents.once("ready-to-show", () => {
-        windowObject.show();
+    errorWindow.webContents.once("ready-to-show", () => {
+        errorWindow.show();
         shell.beep();
+        if (errStack != "") {
+            errorWindow.webContents.send("errmain:payload", errStack, errType, errReason);
+        }
     });
 
-    windowObject.on("close", () => {
-        windowObject = null;
+    ipcMain.on("modal:cls", () => {
+        errorWindow.close();
     });
 }
 
-function panicBox(windowObject) {
-    createChildishWindow(windowObject, "./src/pages/error.html");
+function panic(errObject, errType = "", errReason = "") {
+    createErrorWindow(errObject.stack, errType, errReason);
 }
 
 module.exports = {
-    panicBox: panicBox,
+    panic: panic,
 };

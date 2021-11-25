@@ -2,9 +2,68 @@
 <html lang="en">
     <head>
         <title>ERROR!</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../styles/appFont.css" />
         <link rel="stylesheet" href="../styles/userstyle.css" />
+        <link rel="stylesheet" href="../styles/materialize.min.css" />
     </head>
     <body>
-        <h1>Error!</h1>
+        <header>
+            <nav class="z-depth-0">
+                <div class="nav-wrapper">
+                    <a class="brand-logo center" style="font-size: 15px">Resource Master - Fatal Error</a>
+                    <ul id="nav-mobile" class="right no-drag">
+                        <li>
+                            <a id="wincls" class="window-control-wrapper"
+                                ><img src="../../assets/icons/windowControl/close.png" class="window-cls" alt=""
+                            /></a>
+                        </li>
+                    </ul>
+                    <ul id="nav-mobile" class="left no-drag">
+                        <li id="sm-ico-wrap" class="nav-items"><img id="small-icon" src="../../assets/icons/icon.png" /></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <div id="main-content" class="container">
+            <h2 id="err-header" style="margin-top: 20px; margin-bottom: 5px">Application Error</h2>
+            <p id="err-reason" style="font-size: 1.3em"></p>
+            <p id="err-stack" style="font-size: 0.95em"></p>
+        </div>
     </body>
+    <script>
+        // Do these things because electron is stupid https://github.com/electron/electron/issues/254#issuecomment-183483641
+        if (typeof module === "object") {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+    <script src="../../node_modules/jquery/dist/jquery.js" type="text/javascript"></script>
+    <script src="../styles/materialize.min.js" type="text/javascript"></script>
+    <script>
+        if (window.module) module = window.module;
+
+        const electron = require("electron");
+        const { ipcRenderer } = electron;
+
+        ipcRenderer.on("errmain:payload", (_, errStack, errType, errReason) => {
+            $(() => {
+                if (errType != "") {
+                    $("#err-header").text(`${errType} Error`);
+                }
+                if (errReason != "") {
+                    $("#err-reason").text(errReason);
+                }
+                $("#err-stack").html(`<b>Stack trace:</b> ${errStack}`);
+            });
+        });
+
+        $(() => {
+            $("#wincls").on("click", (e) => {
+                e.preventDefault();
+                ipcRenderer.send("modal:cls");
+            });
+        });
+    </script>
 </html>
