@@ -23,13 +23,18 @@ body {
     color: rgb(233, 233, 233);
     overflow-y: hidden;
 }
-#main-content {
+#main-content,
+#main-err-content {
     max-height: 100vh;
     overflow-y: auto;
+    padding-bottom: 4rem;
+}
+#main-content {
+    padding-left: 260px;
 }
 
 /* Customize scrollbar */
-/* ::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 12px;
 }
 ::-webkit-scrollbar-track {
@@ -39,7 +44,7 @@ body {
     background-color: #6e6e6e;
     border-radius: 20px;
     border: 3px solid #3e3e3e;
-} */
+}
 
 /* Customize custom title bar */
 nav {
@@ -78,6 +83,16 @@ nav .button-collapse i {
     margin-top: 2px;
 }
 
+/* Sidenav */
+.sidenav {
+    top: 25px !important;
+    background-color: #474747 !important;
+    width: 260px !important;
+}
+.sidebar-options {
+    color: white !important;
+}
+
 /* --Infuriatingly-- customize window control icons */
 .window-min {
     height: 19px;
@@ -100,6 +115,26 @@ nav ul li:hover {
 }
 #sm-ico-wrap:hover {
     background-color: #1e1e1e !important;
+}
+
+/* Error window icon */
+.img-frame {
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    margin: 1em 0;
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+.img-helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.img-object {
+    vertical-align: middle;
+    max-height: 50px;
+    max-width: 50px;
 }
 
 /* Miscellaneous */

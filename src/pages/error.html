@@ -11,7 +11,7 @@
         <header>
             <nav class="z-depth-0">
                 <div class="nav-wrapper">
-                    <a class="brand-logo center" style="font-size: 15px">Resource Master - Fatal Error</a>
+                    <a class="brand-logo center" style="font-size: 15px" id="wintitle"></a>
                     <ul id="nav-mobile" class="right no-drag">
                         <li>
                             <a id="wincls" class="window-control-wrapper"
@@ -26,10 +26,19 @@
             </nav>
         </header>
 
-        <div id="main-content" class="container">
-            <h2 id="err-header" style="margin-top: 20px; margin-bottom: 5px">Application Error</h2>
-            <p id="err-reason" style="font-size: 1.3em"></p>
-            <p id="err-stack" style="font-size: 0.95em"></p>
+        <div id="main-err-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col s2 img-frame">
+                        <span class="img-helper"></span><img src="../../assets/icons/error.png" alt="" style="width: 50px" class="img-object" />
+                    </div>
+                    <div class="col s10">
+                        <h2 id="err-header" style="margin-top: 20px; margin-bottom: 5px"></h2>
+                    </div>
+                </div>
+                <p id="err-reason" style="font-size: 1.3em"></p>
+                <p id="err-stack" style="font-size: 0.95em"></p>
+            </div>
         </div>
     </body>
     <script>
@@ -51,6 +60,7 @@
             $(() => {
                 if (errType != "") {
                     $("#err-header").text(`${errType} Error`);
+                    $("#wintitle").text(`Resource Master - ${errType} Error`);
                 }
                 if (errReason != "") {
                     $("#err-reason").text(errReason);

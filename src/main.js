@@ -8,7 +8,6 @@
  */
 
 const electron = require("electron");
-const { type } = require("jquery");
 const panicBox = require("./panicBox.js");
 require("./sqlHandler.js");
 
@@ -24,7 +23,7 @@ app.on("ready", () => {
         show: false,
         frame: false,
         backgroundColor: "#1E1E1E",
-        minWidth: 950,
+        minWidth: 1000,
         minHeight: 620,
         webPreferences: {
             nodeIntegration: true,

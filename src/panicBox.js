@@ -35,7 +35,7 @@ function createErrorWindow(errStack = "", errType = "", errReason = "") {
         }
     });
 
-    ipcMain.on("modal:cls", () => {
+    ipcMain.once("modal:cls", () => {
         errorWindow.close();
     });
 }

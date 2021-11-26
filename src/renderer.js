@@ -16,6 +16,9 @@ $(() => {
         ipcRenderer.send("win:cls");
     });
 
+    // Sidenav
+    $(".sidenav").sidenav();
+
     // Testing
     $("#winsize-test").on("click", (e) => {
         e.preventDefault();
