@@ -19,8 +19,37 @@ $(() => {
     // Sidenav
     $(".sidenav").sidenav();
 
-    // Testing
-    $("#winsize-test").on("click", (e) => {
+    // SQL Query
+    $("#query-submit").on("click", (e) => {
+        e.preventDefault();
+        query_text = $("#query-textarea").val();
+        ipcRenderer.send("sql:request", query_text);
+    });
+
+    $("#query-delete").on("click", (e) => {
+        e.preventDefault();
+        $("#query-textarea").val("");
+    });
+
+    // Titlebar Dropdown
+    var is_any_titlebar_open = false;
+
+    $(".dropdown-trigger").dropdown({
+        coverTrigger: false,
+        onOpenStart: () => {
+            is_any_titlebar_open = true;
+        },
+        onCloseStart: () => {
+            is_any_titlebar_open = false;
+        },
+    });
+
+    $("#exit-dropdown").on("click", (e) => {
+        e.preventDefault();
+        ipcRenderer.send("win:cls");
+    });
+
+    $("#test-error-dropdown").on("click", (e) => {
         e.preventDefault();
         ipcRenderer.send("win:err-test");
     });

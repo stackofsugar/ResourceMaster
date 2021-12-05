@@ -35,17 +35,13 @@ app.once("quit", () => {
 ipcMain.on("sqlquery:send", (e, sqlQueryItem) => {
     sqlQueryGlobal = sqlQueryItem;
     console.log("Inserted SQL Query: " + sqlQueryItem);
-    if (sqlQueryItem == "sus") {
-        panicBox();
-    } else {
-        runSQLQuery(sqlQueryItem)
-            .then((result) => {
-                console.log(result);
-            })
-            .catch((err) => {
-                panic(err, "SQL", "Specified SQL query cannot be run");
-            });
-    }
+    runSQLQuery(sqlQueryItem)
+        .then((result) => {
+            console.log(result);
+        })
+        .catch((err) => {
+            panic(err, "SQL", "Specified SQL query cannot be run");
+        });
 });
 
 function runSQLQuery(query) {
@@ -76,3 +72,7 @@ function runSQLQuery(query) {
 sql.on("error", (err) => {
     panic(err, "SQL", "Global SQL Error");
 });
+
+module.exports = {
+    runSQLQuery: runSQLQuery,
+};

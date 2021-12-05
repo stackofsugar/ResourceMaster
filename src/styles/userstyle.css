@@ -137,10 +137,48 @@ nav ul li:hover {
     max-width: 50px;
 }
 
+/* Dashboard SQL Query */
+#query-textarea {
+    color: rgb(233, 233, 233);
+    line-height: 30px;
+    font-family: "Consolas", sans-serif;
+}
+#query-textarea:focus {
+    border-bottom: 1px solid #f57c00;
+    box-shadow: 0 1px 0 0 #f57c00;
+}
+#dashboard-query label {
+    color: #f57c00;
+}
+
+/* Titlebar Dropdown */
+.dropdown-content li.divider {
+    min-height: 0 !important;
+    height: 1px !important;
+}
+.dropdown-content {
+    background-color: #1e1e1e !important;
+    font-size: 0.9em;
+}
+.dropdown-content li {
+    min-height: 42px !important;
+    height: 42px !important;
+}
+.dropdown-content li > a {
+    font-size: 13px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    color: white !important;
+}
+
 /* Miscellaneous */
 
 #app-title {
     margin-top: 0.5rem;
+}
+
+#SQL-prompt {
+    color: rgb(175, 175, 175);
 }
 
 #subtitle-top {

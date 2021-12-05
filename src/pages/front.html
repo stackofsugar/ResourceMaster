@@ -32,16 +32,34 @@
                     <ul id="nav-mobile" class="left no-drag">
                         <li id="sm-ico-wrap" class="nav-items"><img id="small-icon" src="../../assets/icons/icon.png" /></li>
                         <li>
-                            <a id="nav-file" class="nav-items">File</a>
+                            <a id="nav-file" class="nav-items dropdown-trigger" data-target="file-dropdown">File</a>
                         </li>
-                        <li><a id="nav-settings" class="nav-items">Settings</a></li>
-                        <li><a id="nav-sql" class="nav-items">SQL</a></li>
+                        <li><a id="nav-settings" class="nav-items dropdown-trigger" data-target="settings-dropdown">Settings</a></li>
+                        <li><a id="nav-sql" class="nav-items dropdown-trigger" data-target="sql-dropdown">SQL</a></li>
                     </ul>
                 </div>
             </nav>
 
+            <ul id="file-dropdown" class="dropdown-content">
+                <li><a>Test1</a></li>
+                <li><a>Test2</a></li>
+                <li><a>Test3</a></li>
+                <li class="divider" tabindex="-1"></li>
+                <li><a id="exit-dropdown">Exit</a></li>
+            </ul>
+
+            <ul id="settings-dropdown" class="dropdown-content">
+                <li><a id="test-error-dropdown">Test Error</a></li>
+            </ul>
+
+            <ul id="sql-dropdown" class="dropdown-content">
+                <li><a>Reset SQL</a></li>
+            </ul>
+
             <ul id="nav-mobile" class="sidenav sidenav-fixed">
-                <li><a class="sidebar-options">Testing</a></li>
+                <li><a class="sidebar-options">Site View</a></li>
+                <li><a class="sidebar-options">Company View</a></li>
+                <li><a class="sidebar-options">Resource View</a></li>
             </ul>
         </header>
 
@@ -52,65 +70,16 @@
                     <h1 id="app-title">Dashboard</h1>
                 </div>
                 <div class="row">
-                    <button id="winsize-test" type="submit" class="waves-effect waves-light btn">Try raising an error here</button>
+                    <h6 id="SQL-prompt">Enter your SQL query below</h6>
+                    <div id="dashboard-query">
+                        <textarea id="query-textarea" class="materialize-textarea"></textarea>
+                        <button id="query-submit" type="submit" class="waves-effect waves-light btn orange darken-2">Submit SQL Query</button>
+                        <button id="query-delete" class="waves-effect waves-light btn red darken-2" style="padding: 0 5px">
+                            <img src="../../assets/icons/delete.png" alt="" style="height: 30px; margin-top: 3px" />
+                        </button>
+                    </div>
                 </div>
-                <div class="row" style="text-align: justify; color: rgb(193, 193, 193)">
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempor ultricies arcu at dapibus. Duis volutpat vel arcu eu
-                        dapibus. Nullam consectetur augue in erat aliquam, dignissim luctus nibh ullamcorper. Nam interdum imperdiet turpis, quis
-                        tincidunt elit ultrices sit amet. Donec ex nisi, consectetur eleifend turpis sed, varius lacinia turpis. Cras bibendum metus
-                        purus, sed fermentum ante malesuada ut. Aliquam erat volutpat. Integer consequat leo ac libero pretium faucibus. Suspendisse
-                        potenti. Aenean laoreet iaculis felis sed ultricies. Aenean efficitur enim nec molestie efficitur. Donec faucibus felis ex, a
-                        ultricies arcu semper ac. Vivamus quis purus ac magna aliquet condimentum egestas quis diam.
-                    </p>
-                    <p>
-                        Morbi mattis mattis ex, in aliquet metus tristique id. Fusce dignissim ligula eget augue efficitur convallis. Praesent sit
-                        amet tortor ac arcu posuere cursus eu id sapien. Integer finibus quam vitae venenatis fringilla. Nam iaculis, mauris in
-                        tincidunt posuere, odio ipsum viverra dolor, id laoreet lorem erat at libero. Quisque placerat suscipit auctor. Praesent
-                        posuere pretium libero vitae scelerisque. Suspendisse eget purus vitae eros semper porta id non quam. Vivamus dapibus eget
-                        turpis quis fringilla. Fusce posuere ligula eu odio ultricies blandit. Cras at risus lorem. Nam vulputate ex non tellus tempor
-                        ullamcorper et ut risus. Sed eget feugiat purus, ac finibus mi. Praesent in porta lacus. Phasellus bibendum in nisi sit amet
-                        tempus.
-                    </p>
-                    <p>
-                        Aliquam dui nisi, consequat at ipsum eu, porttitor pellentesque urna. Donec a nisl id quam ultrices eleifend. In leo ante,
-                        varius id vehicula laoreet, scelerisque id sapien. Nam risus eros, laoreet sed lorem et, pharetra blandit odio. Fusce ac
-                        gravida elit. Nulla venenatis risus et libero congue ultrices. Sed vitae ornare sapien. Quisque laoreet, diam sed convallis
-                        congue, dolor massa viverra tortor, ut tristique mi dolor efficitur ante. Fusce sed lacus mauris. Sed dapibus dapibus tempor.
-                        Ut a lacus sit amet est sagittis cursus eu quis metus.
-                    </p>
-                    <p>
-                        Nunc efficitur placerat risus, id commodo arcu. Duis facilisis, ipsum vel efficitur commodo, quam purus suscipit nisl, a
-                        euismod felis ex a sem. Nulla vel enim in metus venenatis feugiat. Phasellus sed consequat magna. Aliquam ornare mauris
-                        consectetur, ullamcorper arcu vitae, consectetur justo. Aliquam id tellus nec tortor efficitur molestie ac ut quam. Sed eget
-                        libero tellus. Donec tristique, lorem tristique tincidunt tincidunt, neque dolor sodales sapien, sit amet egestas diam magna
-                        consequat diam. Donec vel mollis massa, sit amet lacinia augue. Fusce volutpat lobortis felis, sed vulputate arcu accumsan
-                        sed. Quisque iaculis diam eu nibh molestie pretium.
-                    </p>
-                    <p>
-                        In eu magna quis ipsum congue consectetur. Sed lacinia purus sed nisi sagittis, et faucibus orci rutrum. Ut blandit turpis in
-                        elit venenatis convallis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec
-                        pretium orci nisl, nec pulvinar felis tincidunt in. Cras elementum gravida bibendum. Nunc luctus lobortis euismod. Ut quis
-                        viverra purus. Maecenas semper augue quam, eget hendrerit elit pretium non. Morbi maximus velit tellus, et feugiat turpis
-                        consequat a. Cras eu ornare enim, eget feugiat metus. Sed tincidunt venenatis erat, id tristique quam dapibus pretium.
-                    </p>
-                    <p>
-                        Nulla dignissim consectetur sapien, non semper nisl vehicula eget. Nulla facilisi. Ut lacinia efficitur eros, non interdum
-                        augue pharetra vitae. Nunc eleifend sagittis ipsum, in mollis erat ullamcorper ut. Pellentesque malesuada sapien eget accumsan
-                        viverra. Vestibulum non elementum orci. Quisque accumsan magna sed velit sagittis, at aliquam purus faucibus. Vestibulum quis
-                        elit ante. Cras scelerisque vel mi molestie sodales. Morbi eget felis tristique, sodales justo sodales, consequat mi. Mauris
-                        at augue sed libero tempus posuere eget vitae erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus
-                        metus, suscipit in augue et, pharetra tincidunt dolor. In hac habitasse platea dictumst. Nunc nisl nulla, tincidunt sit amet
-                        dolor consectetur, consectetur viverra ante.
-                    </p>
-                    <p>
-                        Pellentesque vestibulum iaculis lorem, et porta ipsum porta ut. Pellentesque vehicula justo quis odio gravida, sed efficitur
-                        libero ultrices. Etiam vitae odio turpis. Etiam vel elit sollicitudin, volutpat dolor vel, rhoncus nisl. Pellentesque habitant
-                        morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer eget est elit. Nullam et gravida sapien. Cras
-                        metus magna, sollicitudin sit amet sollicitudin aliquam, aliquet gravida orci. Suspendisse et sapien at enim gravida efficitur
-                        in ut purus.
-                    </p>
-                </div>
+                <div id="sql-result-table"></div>
             </div>
         </div>
     </body>
