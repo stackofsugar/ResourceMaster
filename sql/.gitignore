@@ -1,2 +1,3 @@
 generate_data/
+tests/
 *.log
