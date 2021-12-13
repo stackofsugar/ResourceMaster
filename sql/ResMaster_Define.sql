@@ -24,7 +24,6 @@ DROP TABLE IF EXISTS dimiliki_oleh
 DROP TABLE IF EXISTS dimanfaatkan_oleh
 DROP TABLE IF EXISTS UNSUR
 DROP TABLE IF EXISTS PRODUK_TAMBANG
-DROP TABLE IF EXISTS MINYAK_MENTAH
 DROP TABLE IF EXISTS PRODUK_PERKEBUNAN
 DROP TABLE IF EXISTS PRODUK_PERHUTANAN
 DROP TABLE IF EXISTS INSTALASI_PENGOLAHAN_AIR
@@ -35,6 +34,7 @@ DROP TABLE IF EXISTS IZIN_USAHA
 DROP TABLE IF EXISTS SITUS_AIR
 DROP TABLE IF EXISTS TAMBANG
 DROP TABLE IF EXISTS RIG_PENGEBORAN
+DROP TABLE IF EXISTS MINYAK_MENTAH
 DROP TABLE IF EXISTS KEBUN
 DROP TABLE IF EXISTS HUTAN
 DROP TABLE IF EXISTS SITUS_SDA
@@ -75,11 +75,21 @@ CREATE TABLE KEBUN (
         REFERENCES SITUS_SDA (KdSitus) ON DELETE NO ACTION ON UPDATE NO ACTION
 )
 
+CREATE TABLE MINYAK_MENTAH (
+    KdProdMinyak INT IDENTITY(1,1) PRIMARY KEY,
+    NamaMinyak VARCHAR(50) NOT NULL,
+    APIGravity FLOAT NOT NULL,
+    PersenBelerang FLOAT NOT NULL
+)
+
 CREATE TABLE RIG_PENGEBORAN (
     KdSitusPengeboran INT PRIMARY KEY,
     KlasifikasiLokasi VARCHAR(6) NOT NULL,
+    KdProdMinyak INT NOT NULL,
     CONSTRAINT FK_DisjointRIGPENGEBORAN FOREIGN KEY (KdSitusPengeboran)
-        REFERENCES SITUS_SDA (KdSitus) ON DELETE NO ACTION ON UPDATE NO ACTION
+        REFERENCES SITUS_SDA (KdSitus) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT FK_KdProdMinyakMINYAKMENTAH FOREIGN KEY (KdProdMinyak)
+        REFERENCES MINYAK_MENTAH (KdProdMinyak) ON DELETE NO ACTION ON UPDATE NO ACTION
 )
 
 CREATE TABLE TAMBANG (
@@ -157,16 +167,6 @@ CREATE TABLE PRODUK_PERKEBUNAN (
     NamaIlmiah VARCHAR(50) NOT NULL
 )
 
-CREATE TABLE MINYAK_MENTAH (
-    KdProdMinyak INT IDENTITY(1,1) PRIMARY KEY,
-    NamaMinyak VARCHAR(50) NOT NULL,
-    APIGravity FLOAT NOT NULL,
-    PersenBelerang FLOAT NOT NULL,
-    KdSitusPengeboran INT NOT NULL,
-    CONSTRAINT FK_KdSitusMinyakMINYAKMENTAH FOREIGN KEY (KdSitusPengeboran)
-        REFERENCES RIG_PENGEBORAN (KdSitusPengeboran) ON DELETE NO ACTION ON UPDATE NO ACTION
-)
-
 CREATE TABLE PRODUK_TAMBANG (
     KdProdTambang INT IDENTITY(1,1) PRIMARY KEY,
     NamaProduk VARCHAR(50) NOT NULL,
@@ -204,7 +204,6 @@ CREATE TABLE dimiliki_oleh (
 CREATE TABLE menjalin (
     KdPerusahaan INT NOT NULL,
     KdKS INT NOT NULL,
-    PRIMARY KEY(KdPerusahaan, KdKS),
     StatusKeanggotaan VARCHAR(20) NOT NULL,
     CONSTRAINT FK_KdPerusahaanMENJALIN FOREIGN KEY (KdPerusahaan)
         REFERENCES PERUSAHAAN (KdPerusahaan) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -246,8 +245,7 @@ CREATE TABLE mengandung (
     KdProdTambang INT NOT NULL,
     KdUnsur INT NOT NULL,
     PRIMARY KEY(KdProdTambang, KdUnsur),
-    Kadar FLOAT NOT NULL,
-    Satuan VARCHAR (20) NOT NULL,
+    Persentase FLOAT NOT NULL,
     CONSTRAINT FK_KdProdTambangMENGANDUNG FOREIGN KEY (KdProdTambang)
         REFERENCES PRODUK_TAMBANG (KdProdTambang) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT FK_KdUnsurMENGANDUNG FOREIGN KEY (KdUnsur)
@@ -823,45 +821,222 @@ VALUES
     ('Waduk Kedunguling', 'Hayati', 7.94028, 110.84083, 85),
     ('Waduk Krakatausteel', 'Hayati', 6.0143, 106.0293, 62),
     ('Waduk Lalung', 'Hayati', 7.61417, 110.93778, 83),
-    ('Waduk Laor', 'Hayati', 8.144, 112.4743, 86),
+    ('Waduk Sengguruh', 'Hayati', 8.1871, 112.556, 92),
     ('Waduk Leran Dua', 'Hayati', 7.17464, 111.80982, 89),
     ('Waduk Leran Satu', 'Hayati', 7.17008, 111.80633, 88),
-    ('Waduk Logawe', 'Hayati', 7.4976, 112.0808, 91),
+    ('Sungai Brantas', 'Hayati', -7.589408, 112.112638, 89),
     ('Waduk Mojoendok', 'Hayati', 7.33111, 110.87778, 83),
     ('Waduk Mrica', 'Hayati', 7.38556, 109.62111, 80),
     ('Waduk Mulur', 'Hayati', 7.68917, 110.87722, 81),
-    ('Waduk Ngancar', 'Hayati', 7.99333, 110.98333, 80),
+    ('Waduk Sidorejo', 'Hayati', 7.23222, 110.85306, 82),
     ('Waduk Nglambang', 'Hayati', 7.298, 111.7282, 86),
     ('Waduk Notopuro', 'Hayati', 7.4855, 111.6948, 91),
     ('Waduk Pacal', 'Hayati', 7.3674, 111.869, 87),
     ('Waduk Palasari', 'Hayati', 8.2508, 114.5557, 95),
-    ('Waduk Panjang', 'Hayati', 7.3375, 112.0536, 90),
-    ('Waduk Parangjoho', 'Hayati', 7.94806, 110.81639, 80),
-    ('Waduk Pare', 'Hayati', 7.29417, 110.98, 85),
-    ('Waduk Pare', 'Hayati', 7.32194, 110.9175, 80),
-    ('Waduk Perning', 'Hayati', 7.5061, 112.1129, 86),
-    ('Waduk Rancang', 'Hayati', 7.1609, 112.3714, 86),
+    ('Sungai Ula', 'Hayati', -1.797816, 121.771782, 39),
+    ('Danau Poso', 'Hayati', -1.932563, 120.610697, 39),
+    ('Danau Lindu', 'Hayati', -1.318866, 120.083023, 39),
+    ('Danau Rano', 'Hayati', -0.046148, 119.70236, 39),
+    ('Danau Kemuning', 'Hayati', -5.305226, 105.735141, 13),
+    ('Danau Lebar', 'Hayati', -5.252137, 104.274566, 12),
     ('Waduk Riam Kanan', 'Hayati', -3.5324533, 115.054625, 54),
-    ('Waduk Sange', 'Hayati', 7.15, 110.92361, 80),
+    ('Sungai Langka', 'Hayati', -5.387185, 105.1776, 12),
     ('Waduk Sempor', 'Hayati', 7.55583, 109.48472, 80),
-    ('Waduk Sendang', 'Hayati', 7.4927, 112.0708, 89),
-    ('Waduk Sengguruh', 'Hayati', 8.1871, 112.556, 92),
+    ('Sungai Rokan', 'Hayati', 1.939103, 100.898926, 14),
+    ('Sungai Siak', 'Hayati', 0.80634, 101.974695, 15),
     ('Waduk Gajahmungkur', 'Hayati', 7.90528, 110.89944, 85),
-    ('Waduk Sidorejo', 'Hayati', 7.23222, 110.85306, 82),
-    ('Waduk Solovai', 'Hayati', 7.2231, 111.5547, 89),
-    ('Waduk Songputri', 'Hayati', 7.99139, 110.82861, 80),
-    ('Waduk Sonorejo', 'Hayati', 7.18444, 110.88944, 85),
-    ('Waduk Sumberkepuh', 'Hayati', 7.496, 112.067, 94),
-    ('Waduk Sumbersono', 'Hayati', 7.4978, 112.0843, 92),
-    ('Waduk Suru', 'Hayati', 7.20167, 111.09889, 80),
-    ('Waduk Tirtomarto', 'Hayati', 7.59056, 110.98944, 85),
-    ('Waduk Tiukulit', 'Hayati', 8.6959, 117.6776, 96),
-    ('Waduk Wadaslintang', 'Hayati', 7.57583, 109.78639, 83),
-    ('Waduk Warunggedang', 'Hayati', 7.275, 111.5141, 92),
-    ('Waduk Watang', 'Hayati', 7.2832, 111.6217, 86),
-    ('Waduk Widas', 'Hayati', 7.5382, 111.7952, 91),
-    ('Waduk Winong', 'Hayati', 7.41778, 110.61861, 83),
-    ('Sungai Musi', 'Hayati', -2.9789006, 104.0506153, 24);
+    ('Danau Dendam Tak Sudah', 'Hayati', -3.803416, 102.309305, 7),
+    ('Sungai Serut', 'Hayati', -3.781888, 102.284378, 7),
+    ('Sungai Batanghari', 'Hayati', -1.4835, 103.48048, 9),
+    ('Sungai Sapih', 'Hayati', -0.897581, 100.359323, 22),
+    ('Sungai Kamuyang', 'Hayati', -0.267455, 100.676035, 17),
+    ('Danau Singkarak', 'Hayati', -0.623668, 100.547088, 17),
+    ('Danau Talang', 'Hayati', -1.012766, 100.70272, 18),
+    ('Sungai Wampu', 'Hayati', 3.824275, 98.47205, 29),
+    ('Sungai Binge', 'Hayati', 3.608354, 98.479582, 31),
+    ('Sungai Renun', 'Hayati', 2.730892, 98.388572, 31),
+    ('Sungai Batang Gadis', 'Hayati', 1.04138, 98.934895, 30),
+    ('Sungai Asahan', 'Hayati', 2.977342, 99.733344, 33),
+    ('Sungai Peusangan', 'Hayati', 4.648254, 96.690218, 4),
+    ('Sungai Alas', 'Hayati', 2.987357, 97.937711, 2),
+    ('Sungai Musi', 'Hayati', -2.9789006, 104.0506153, 24),
+    ('Aceh A Block', 'Non Hayati', 5.7232198, 95.6750934, 5),
+    ('Northwest Java Sea Block', 'Non Hayati', -3.5524335, 108.4536991, 6),
+    ('Jabung Block', 'Non Hayati', -5.4483782, 105.7548697, 11),
+    ('Jambi Merang Block', 'Non Hayati', -1.327075, 103.8953754, 88),
+    ('Cepu Block', 'Non Hayati', -7.1670775, 111.5344404, 84),
+    ('Bawean Block', 'Non Hayati', -5.756089, 112.726813, 86),
+    ('Brantas Block', 'Non Hayati', -7.5878858, 112.1158271, 90),
+    ('Bulu Block', 'Non Hayati', -7.6321947, 112.11535, 89),
+    ('Kangean Block', 'Non Hayati', -6.9531749, 115.3331311, 51),
+    ('Ketapang Block', 'Non Hayati', -1.6793058, 109.4632715, 14),
+    ('Madura Offshore Block', 'Non Hayati', -7.0569577, 112.8385991, 59),
+    ('Madura Strait Block', 'Non Hayati', -6.991708, 112.743259, 36),
+    ('Attaka Block', 'Non Hayati', -0.0094596, 117.2185277, 58),
+    ('Bangkanai Block', 'Non Hayati', -0.5729605, 115.1019482, 58),
+    ('Bengara I Block', 'Non Hayati', 0.899675, 118.025335, 58),
+    ('Bontang Block', 'Non Hayati', 0.148773, 117.504103, 59),
+    ('East Kalimantan Block', 'Non Hayati', 0.568946, 117.661708, 31),
+    ('Ganal Block', 'Non Hayati', -1.578998, 116.549194, 9),
+    ('Mahakam Block', 'Non Hayati', -0.03945, 115.751769, 32),
+    ('Muara Bakau Block', 'Non Hayati', -0.890183, 117.173542, 36),
+    ('Kakap Block', 'Non Hayati', -0.628986, 117.570841, 32),
+    ('Natuna Sea Block A', 'Non Hayati', 1.180552, 104.67445, 10),
+    ('Northwest Natuna Block', 'Non Hayati', 1.137087, 103.801867, 11),
+    ('Bula Block', 'Non Hayati', -3.1096585, 130.4897502, 48),
+    ('Masela Block', 'Non Hayati', -8.1577435, 129.8513121, 51),
+    ('Berau Block', 'Non Hayati', -4.254191, 137.861813, 51),
+    ('Kepala Burung Block', 'Non Hayati', -2.309756, 140.065816, 30),
+    ('Muturi Block', 'Non Hayati', -1.723527, 138.402848, 6),
+    ('Bentu-Segat Block', 'Non Hayati', 1.685225, 101.884304, 15),
+    ('Coastal Plains And Pekanbaru Block', 'Non Hayati', 0.731571, 101.43488, 15),
+    ('Korinci Baru Block', 'Non Hayati', 0.080385, 103.810403, 14),
+    ('Langgak Block', 'Non Hayati', 2.180224, 100.682785, 29),
+    ('Makassar Strait', 'Non Hayati', -5.180284, 119.348212, 49),
+    ('Muriah Block', 'Non Hayati', -4.503072, 120.39491, 29),
+    ('Lemang Block', 'Non Hayati', -1.56966, 100.549222, 87),
+    ('Bangko Block Area I & II', 'Non Hayati', -1.836081, 104.506505, 26),
+    ('Belida Block', 'Non Hayati', -3.800205, 104.9211873, 23),
+    ('Corridor Block', 'Non Hayati', -3.997838, 105.881202, 58),
+    ('Merangin-II Block', 'Non Hayati', -2.231655, 101.926687, 11),
+    ('Ogan Komering', 'Non Hayati', -3.803581, 104.496461, 27),
+    ('Palmerah Block', 'Non Hayati', -3.750226, 104.655519, 25),
+    ('Pandan Block', 'Non Hayati', -4.028185, 104.508328, 27),
+    ('Gebang Block', 'Non Hayati', 4.065829, 98.408766, 8),
+    ('Karang Agung Block', 'Non Hayati', -2.340781, 104.317265, 86),
+    ('Kisaran Block', 'Non Hayati', 3.020682, 99.625103, 32),
+    ('Krueng Mane Block', 'Non Hayati', 2.685963, 100.143919, 17),
+    ('Lematang', 'Non Hayati', 3.295193, 99.509149, 90),
+    ('Malacca Strait Block', 'Non Hayati', 4.207625, 98.255753, 23),
+    ('North Sumatra B Block', 'Non Hayati', 2.056995, 98.244, 26),
+    ('North Sumatra Offshore Block', 'Non Hayati', 1.772594, 98.553601, 24),
+    ('Blangrakal', 'Non Hayati', 4.898845, 96.73196, 2),
+    ('Lhok Kuala', 'Non Hayati', 4.835027, 96.146489, 1),
+    ('Cot Pange', 'Non Hayati', 4.845185, 95.59545, 4),
+    ('Sei Jawi Jawi', 'Non Hayati', 2.48042, 100.088095, 34),
+    ('Kuala Bangka', 'Non Hayati', 2.539131, 99.883773, 28),
+    ('Sidulang', 'Non Hayati', 2.327049, 99.196872, 30),
+    ('Tamparungo', 'Non Hayati', -0.415212, 100.887246, 16),
+    ('Lima Puluh Kota', 'Non Hayati', -0.197037, 100.719066, 20),
+    ('Lebuh Rarak', 'Non Hayati', -3.491174, 104.837643, 25),
+    ('Titi Akar', 'Non Hayati', 1.947226, 101.586219, 14),
+    ('Pulau Muda', 'Non Hayati', 0.350289, 102.838331, 14),
+    ('Gunung Sari', 'Non Hayati', 0.110841, 101.304943, 15),
+    ('Batu Belah', 'Non Hayati', 3.181928, 106.271698, 11),
+    ('Suka Maju', 'Non Hayati', -1.25854, 103.711689, 9),
+    ('Tapah Sari', 'Non Hayati', -1.560187, 102.908796, 9),
+    ('Muara Kemumu', 'Non Hayati', -3.553151, 102.73274, 7),
+    ('Cit', 'Non Hayati', -1.776863, 105.969439, 6),
+    ('Berbura', 'Non Hayati', -1.794054, 105.836993, 6),
+    ('Bumi Nabung Baru', 'Non Hayati', -4.694266, 105.520343, 13),
+    ('Cipta Waras', 'Non Hayati', -5.11427, 104.483442, 13),
+    ('Kadubereum', 'Non Hayati', -6.195204, 106.040193, 62),
+    ('Cipareuan', 'Non Hayati', -7.078287, 107.958058, 78),
+    ('Kemang', 'Non Hayati', -6.911908, 107.247931, 76),
+    ('Rawabogo', 'Non Hayati', -7.059125, 107.429443, 72),
+    ('Wonorejo', 'Non Hayati', -6.982666, 109.621315, 83),
+    ('Banyusari', 'Non Hayati', -7.446216, 110.269183, 80),
+    ('Candi', 'Non Hayati', -7.188378, 110.347039, 81),
+    ('Tlogoagung', 'Non Hayati', -6.881003, 111.925699, 88),
+    ('Lumbang', 'Non Hayati', -7.884541, 112.956713, 93),
+    ('Randubang', 'Non Hayati', -7.830203, 110.904898, 65),
+    ('Labuhan Pandan', 'Non Hayati', -8.405664, 116.714807, 97),
+    ('Belanting', 'Non Hayati', -8.318947, 116.615767, 96),
+    ('Golo Loni', 'Non Hayati', -8.652992, 120.56542, 98),
+    ('Mukureku', 'Non Hayati', -8.657318, 121.851649, 98),
+    ('Lalang', 'Non Hayati', -0.100672, 109.962299, 52),
+    ('Lintang Kapuas', 'Non Hayati', 0.045369, 110.553965, 52),
+    ('Selampung', 'Non Hayati', 0.280715, 110.821151, 53),
+    ('Mantewe', 'Non Hayati', -3.265392, 115.628484, 54),
+    ('Rejo Winangun', 'Non Hayati', -3.363622, 115.824609, 55),
+    ('Ayawan', 'Non Hayati', -2.049392, 112.145442, 56),
+    ('Menamang Kiri', 'Non Hayati', 0.142287, 116.861674, 57),
+    ('Tepian Makmur', 'Non Hayati', 0.694345, 117.058445, 58),
+    ('Lulu', 'Non Hayati', 3.94223, 116.859769, 60),
+    ('Nunukan Utara', 'Non Hayati', 4.27342, 117.229417, 60),
+    ('Tangga Barito', 'Non Hayati', 0.712993, 122.282839, 35),
+    ('Padang Raya', 'Non Hayati', -2.304881, 119.917085, 37),
+    ('Letta', 'Non Hayati', -3.51339, 119.667199, 38),
+    ('Laeya', 'Non Hayati', -4.320626, 122.464087, 40),
+    ('Uematopa', 'Non Hayati', -1.177129, 121.637454, 39),
+    ('Tewasen', 'Non Hayati', 1.166857, 124.501568, 42),
+    ('Kauditan', 'Non Hayati', 1.373809, 125.015472, 45),
+    ('Wahai', 'Non Hayati', -2.911164, 129.299552, 49),
+    ('Mekar Sari', 'Non Hayati', 1.123128, 128.332141, 47),
+    ('Totoberi', 'Non Hayati', -2.867051, 136.089483, 51),
+    ('Kayubiro', 'Non Hayati', -2.134337, 132.492683, 50);
+
+INSERT INTO 
+    MINYAK_MENTAH (
+        NamaMinyak, APIGravity,
+        PersenBelerang
+    )
+VALUES
+    ('Belanak', 47.8, 0.02),
+    ('Cepu', 32, 0.15),
+    ('Cinta', 31.1, 0.09),
+    ('Duri', 20.8, 0.20),
+    ('Handil Mix', 43.9, 0.05),
+    ('Minas', 35.3, 0.09),
+    ('Senipah', 51.9, 0.03),
+    ('West Seno', 38, 0.12),
+    ('Widuri', 33.2, 0.07);
+
+INSERT INTO 
+    RIG_PENGEBORAN (
+        KdSitusPengeboran, KlasifikasiLokasi, KdProdMinyak
+    )
+VALUES
+    (496, 'Off', 1),
+    (497, 'On', 7),
+    (498, 'On', 9),
+    (499, 'Off', 2),
+    (500, 'Off', 3),
+    (501, 'On', 4),
+    (502, 'On', 6),
+    (503, 'Off', 2),
+    (504, 'Off', 8),
+    (505, 'On Off', 2),
+    (506, 'On Off', 4),
+    (507, 'Off', 8),
+    (508, 'Off', 4),
+    (509, 'On', 3),
+    (510, 'On', 2),
+    (511, 'On', 3),
+    (512, 'Off', 4),
+    (513, 'Off', 7),
+    (514, 'On Off', 2),
+    (515, 'On', 6),
+    (516, 'On Off', 1),
+    (517, 'On', 2),
+    (518, 'On Off', 9),
+    (519, 'Off', 6),
+    (520, 'Off', 4),
+    (521, 'Off', 8),
+    (522, 'On', 7),
+    (523, 'On', 1),
+    (524, 'Off', 3),
+    (525, 'On Off', 2),
+    (526, 'On Off', 4),
+    (527, 'On', 6),
+    (528, 'Off', 7),
+    (529, 'On', 5),
+    (530, 'Off', 1),
+    (531, 'Off', 1),
+    (532, 'On', 5),
+    (533, 'Off', 1),
+    (534, 'Off', 2),
+    (535, 'Off', 4),
+    (536, 'Off', 5),
+    (537, 'On', 3),
+    (538, 'On Off', 3),
+    (539, 'On', 5),
+    (540, 'Off', 8),
+    (541, 'Off', 7),
+    (542, 'On Off', 5),
+    (543, 'On', 9),
+    (544, 'Off', 1),
+    (545, 'On', 1);
 
 INSERT INTO 
     SITUS_AIR (
@@ -1337,32 +1512,32 @@ VALUES
     (466, 'Waduk', 6.81, 11.7, 0.0226, 11.72),
     (467, 'Waduk', 7.36, 11.89, 0.0177, 11.91),
     (468, 'Waduk', 6.96, 9.8, 0.0108, 9.81),
-    (469, 'Waduk', 6.41, 7.21, 0.0147, 7.23),
-    (470, 'Waduk', 8.69, 8.63, 0.0042, 8.63),
-    (471, 'Waduk', 6.06, 8.97, 0.013, 8.98),
-    (472, 'Waduk', 8.76, 8.81, 0.0116, 8.82),
-    (473, 'Waduk', 6.52, 9.94, 0.0081, 9.95),
-    (474, 'Waduk', 8.57, 8.73, 0.0044, 8.73),
+    (469, 'Sungai', 6.41, 7.21, 0.0147, 7.23),
+    (470, 'Danau', 8.69, 8.63, 0.0042, 8.63),
+    (471, 'Danau', 6.06, 8.97, 0.013, 8.98),
+    (472, 'Danau', 8.76, 8.81, 0.0116, 8.82),
+    (473, 'Danau', 6.52, 9.94, 0.0081, 9.95),
+    (474, 'Danau', 8.57, 8.73, 0.0044, 8.73),
     (475, 'Waduk', 7.85, 11.15, 0.0138, 11.16),
-    (476, 'Waduk', 6.18, 8.89, 0.0148, 8.91),
+    (476, 'Sungai', 6.18, 8.89, 0.0148, 8.91),
     (477, 'Waduk', 7.19, 11.6, 0.0113, 11.61),
-    (478, 'Waduk', 6.3, 10.44, 0.005, 10.44),
-    (479, 'Waduk', 8.6, 10.35, 0.0133, 10.36),
+    (478, 'Sungai', 6.3, 10.44, 0.005, 10.44),
+    (479, 'Sungai', 8.6, 10.35, 0.0133, 10.36),
     (480, 'Waduk', 8.08, 11.08, 0.0117, 11.09),
-    (481, 'Waduk', 7.14, 9.35, 0.0287, 9.37),
-    (482, 'Waduk', 8.63, 11.25, 0.0249, 11.27),
-    (483, 'Waduk', 6.22, 8.32, 0.0201, 8.34),
-    (484, 'Waduk', 7.58, 9.06, 0.0266, 9.09),
-    (485, 'Waduk', 8.9, 10.9, 0.0216, 10.92),
-    (486, 'Waduk', 6.48, 11.43, 0.0239, 11.46),
-    (487, 'Waduk', 8.75, 11.72, 0.0102, 11.73),
-    (488, 'Waduk', 7.16, 9.79, 0.0061, 9.8),
-    (489, 'Waduk', 7.49, 11.01, 0.0159, 11.02),
-    (490, 'Waduk', 7.09, 8.49, 0.0053, 8.49),
-    (491, 'Waduk', 8.36, 11.63, 0.0174, 11.65),
-    (492, 'Waduk', 7.17, 9.86, 0.0057, 9.87),
-    (493, 'Waduk', 8.7, 11.95, 0.0138, 11.96),
-    (494, 'Waduk', 6.65, 9.65, 0.0238, 9.68),
+    (481, 'Danau', 7.14, 9.35, 0.0287, 9.37),
+    (482, 'Sungai', 8.63, 11.25, 0.0249, 11.27),
+    (483, 'Sungai', 6.22, 8.32, 0.0201, 8.34),
+    (484, 'Sungai', 7.58, 9.06, 0.0266, 9.09),
+    (485, 'Sungai', 8.9, 10.9, 0.0216, 10.92),
+    (486, 'Danau', 6.48, 11.43, 0.0239, 11.46),
+    (487, 'Danau', 8.75, 11.72, 0.0102, 11.73),
+    (488, 'Sungai', 7.16, 9.79, 0.0061, 9.8),
+    (489, 'Sungai', 7.49, 11.01, 0.0159, 11.02),
+    (490, 'Sungai', 7.09, 8.49, 0.0053, 8.49),
+    (491, 'Sungai', 8.36, 11.63, 0.0174, 11.65),
+    (492, 'Sungai', 7.17, 9.86, 0.0057, 9.87),
+    (493, 'Sungai', 8.7, 11.95, 0.0138, 11.96),
+    (494, 'Sungai', 6.65, 9.65, 0.0238, 9.68),
     (495, 'Sungai', 6.16, 11.8, 0.0067, 11.8);
 
 INSERT INTO 
@@ -1378,6 +1553,161 @@ VALUES
     ('Izin Usaha Pertambangan','Pertambangan'),
     ('Izin Usaha Pertambangan Khusus','Pertambangan'),
     ('Pengusahaan Sumber Daya Air','Perairan');
+
+INSERT INTO
+    PERUSAHAAN (
+        Nama, Pemilik, Website,
+        Email, KotaKantorPusat
+    )
+VALUES
+    -- Batubara
+    ('Adaro Indonesia', 'Negeri', 'adaro.com', 'adarojkt@attglobal.net', 'Jakarta'),
+    ('Baramulti Suksessarana', 'Negeri', 'bssr.co.id', 'corsec@bssr.co.id', 'Samarinda'),
+    ('Bumi Resources', 'Swasta', 'bumiresources.com', 'service@bumiresources.com', 'Jakarta'),
+    ('Darma Henwa', 'Negeri', 'ptdh.co.id', 'corporate.secretary@ptdh.co.id', 'Jakarta'),
+    ('Delta Dunia Makmur', 'Negeri', 'deltadunia.com', 'cs@deltadunia.com', 'Jakarta'),
+    ('Dian Swastatika Sentosa', 'Negeri', 'dss.co.id', 'corsec@dss.co.id', 'Jakarta'),
+    ('Alfa Energi Investama', 'Swasta', 'alfacentra.com', 'corsec@alfacentra.com', 'Jakarta'),
+    ('Golden Energy Mines', 'Negeri', 'goldenenergymines.com', 'corsec@goldenenergymines.com', 'Jakarta'),
+    ('Harum Energy', 'Negeri', 'harumenergy.com', 'corsec@harumenergy.com', 'Jakarta'),
+    ('Indika Energy', 'Negeri', 'indikaenergy.co.id', 'info@indikaenergy.co.id', 'Jakarta'),
+    ('Indo Tambangraya Megah', 'Swasta', 'itmg.co.id', 'indotambang@banpuindo.co.id', 'Jakarta'),
+    ('Resource Alam Indonesia', 'Negeri', 'raintbk.com', 'cs@rainbtk.com', 'Jakarta'),
+    ('Mitrabara Adiperdana', 'Negeri', 'mitrabaraadiperdana.co.id', 'corsec', 'Jakarta'),
+    ('Samindo Resources', 'Swasta', 'samindoresources.com', 'admin@samindoresources.com', 'Jakarta'),
+    ('Bukit Asam', 'Negeri', 'ptba.co.id', 'corsec@bukitasam.co.id', 'Tanjung Enim'),
+    ('Petrosea', 'Negeri', 'petrosea.com', 'info@petrosea.com', 'Tangerang'),
+    ('Golden Eagle Energy', 'Negeri', 'go-eagle.co.id', 'contact@go-eagle.co.id', 'Jakarta'),
+    ('SMR Utama', 'Swasta', 'smrutama.com', 'contact@smrutama.com', 'Jakarta Barat'),
+    ('TBS Energi Utama', 'Negeri', 'tbsenergi.com', 'corsec@tobabara.com', 'Jakarta'),
+
+    -- Minyak
+    ('Antam Resourcindo', 'Negeri', 'antamindo.com', 'customercare@antamindo.com' , 'Jakarta'),
+    ('Semesta Mandiri Indonesia', 'Negeri', 'semindo.com', 'customercare@semindo.com', 'Surabaya'),
+    ('Apexindo Pratama Duta', 'Negeri', 'apexindo.com', 'info@apexindo.com', 'Jakarta'),
+    ('Ratu Prabu Energi', 'Negeri', 'ratuprabuenergi.com', 'corsec@ratuprabuenergi.com', 'Jakarta Selatan'),
+    ('Astroindo Nusantara Infrastruktur', 'Negeri', 'astrindonusantara.com', 'corsec@astrindonusantara.com', 'Jakarta'),
+    ('Elnusa', 'Negeri', 'elnusa.co.id', 'corporate@elnusa.co.id', 'Jakarta'),
+    ('Energi Mega Persada', 'Negeri', 'emp.id', 'info@emp.id', 'Jakarta Selatan'),
+    ('Medco Energi Internasioanl', 'Negeri', 'medcoenergi.com', 'info@medcoenergi.com', 'Jakarta'),
+    ('Perdana Karya Perkasa', 'Negeri', 'pkpk-tbk.co.id', 'corsec@pkpk-tbk.co.id', 'Samarinda'),
+    ('Super Energy', 'Negeri', 'superenergy.co.id', 'secretary@superenergi.com', 'Jakarta Selatan'),
+    ('Ginting Jaya Energi', 'Negeri', 'gj-energi.co.id', 'corsec@gj-energy.co.id', 'Banyuasin'),
+
+    -- Mineral
+    ('Aneka Tambang', 'Negeri', 'antam.com', 'corsec@antam.com', 'Tanjung Barat'),
+    ('Bumi Resources Minerals', 'Negeri', 'bumiresourcesminerals.com', 'corporate.secretary@brm.co.id', 'Jakarta Selatan'),
+    ('Cita Mineral Investindo', 'Negeri', 'citamineral.com', 'corsec@citamineral.com', 'Jakarta Pusat'),
+    ('Vale Indonesia', 'Negeri', 'vale.com', 'ptvi-corpsec@vale.com', 'Jakarta'), --SITUS AIR
+    ('Merdeka Copper Gold', 'Negeri', 'merdekacoppergold.com', 'corporate.secretary@merdekacoppergold.com', 'Jakarta'),
+    ('Kapuas Prima Coal', 'Negeri', 'kapuasprima.co.id', 'info@kapuasprima.co.id', 'Jakarta Utara'),
+
+    -- Kehutanan
+    ('Anugerah Pratama Inspirasi', 'Swasta', 'anugerahpratamasejahtera.blogspot.com', 'contact@asakaryagroup.com', 'Jakarta Selatan'),
+    ('Suka Jaya Makmur', 'Swasta', 'pt-sjm.com', 'marketingalasjkt@gmail.com', 'Jakarta Pusat'),
+    ('Sari Bumi Kusuma', 'Swasta', 'saribumikusuma.id', 'phcab@gmail.com', 'Pontianak'),
+    ('Triwiraasta Bharata', 'Swasta', 'triwiraasta-bharata.com', 'admin.triwirasta@yahoo.com', 'Samarinda'),
+    ('Ratah Timber', 'Swasta', 'ratah.co.id', 'info@ratah.co.id', 'Samarinda'),
+    ('Bina Balantak Utama', 'Swasta', 'binabalantak.com', 'prckli@yahoo.com', 'Sorong'),
+    ('Telagabakti Persada', 'Swasta', 'telagabakti.com', 'pcrkli@yahoo.com', 'Ternate'),
+    ('Sarana Tri Rasa Bhakti', 'Swasta', 'trirasa.co.id', 'info.trirasabhakti@yahoo.com', 'Jakarta'),
+    ('Elbana Abadi Jaya', 'Swasta', 'elbanajaya.my.id', 'cs.elbana@yahoo.com', 'Tanjung Tabalong'),
+
+    -- Situs Air
+    ('Bajradaya Sentranusa', 'Swasta', 'bajradaya.com', 'info@bajradaya.com', 'Jakarta'),
+    ('Perum Jasa Tirta II', 'Swasta', 'jasatirta2.co.id', 'pjt2@jasatirta.co.id', 'Purwakarta'),
+    ('Toya Arta Sejahtera', 'Swasta', 'en.toyaartasejahtera.co.id', 'toyoartasejahtera@yahoo.co.id', 'Bogor'),
+
+    -- Stone Quarrying
+    ('Citatah', 'Negeri', 'citatah.co.id', 'marketing@citatah.co.id', 'Jakarta'),
+
+    -- Perkebunan Kepala Sawit
+    ('Sawit Sumbermas Sarana', 'Swasta', 'ssms.co.id', 'corporate@ssms.co.id', 'Pangkalan Bun'),
+    ('Jaya Agra Wattie', 'Swasta', 'jawattie.com', 'info@jawattie.com', 'Jakarta'),
+    ('Dharma Satya Nusantara', 'Swasta', 'dsn.co.id', 'info@dsngroup.co.id', 'Jakarta'),
+    ('Andira Agro', 'Swasta', 'andiraagro.com', 'corpsec@andiraagro.com', 'Jakarta Timur'),
+    ('Bakrie Sumatera Plantations', 'Swasta', 'bakriesumatera.com', 'investor@bakriesumatera.com', 'Medan'),
+    ('FAP Agri', 'Swasta', 'fap-agri.com', 'corp.secretary@fap-agri.com', 'Jakarta Utara'),
+    ('Perkebunan Nusantara III', 'Negeri', 'ptpn3.co.id', 'biro@ptpn3.com', 'Medan'),
+
+    -- Perkebunan Kopi
+    ('Toarco Jaya', 'Swasta', 'toarco.com', 'info@toarco.com', 'Jakarta'),
+
+    -- Perkebunan Teh
+    ('Perkebunan Nusantara IV', 'Negeri', 'ptpn4.co.id', 'ptpnusantara4@ptpn4.co.id', 'Medan'),
+    ('Perkebunan Nusantara VI', 'Negeri', 'ptpn6.co.id', 'sekretariat@ptpn6.com', 'Jambi'),
+
+    -- Perkebunan Karet
+    ('Kirana Megatara', 'Swasta', 'kiranamegatara.com', 'corporate@kiranamegatara.com', 'Jakarta'),
+    ('Asia Karet', 'Swasta', 'asiakaret.com', 'csc@asiakaret.com', 'Medan'),
+    ('Brantas Mulia', 'Swasta', 'id75369-brantas-mulia-pt.contact.page', 'cs.brantasmulia@yahoo.com', 'Surabaya'),
+    ('Dein Indonesia', 'Swasta', 'deinindonesia.co.id', 'marketing@deinindonesia.co.id', 'Serang'),
+    ('Darmasindo Intikaret', 'Swasta', 'darmasindo.co.id', 'sbx@darmasindo.co.id', 'Medan'),
+
+    -- Minyak
+    ('Pertamina Patra Niaga', 'Negeri', 'pertaminapatraniaga.com', 'info.ppn@pertamina.com', 'Jakarta Selatan'),
+    ('Bumimerak Terminalindo', 'Negeri', 'pplbi.or.id', 'swijaya@bmt-storage.com', 'Jakarta Barat'),
+    ('Laban Raya Cakrawala', 'Negeri', 'labanraya.com', 'info.cakrawala@labanraya.com', 'Surabaya'),
+    ('Samudra Energi Niaga', 'Negeri', 'samudraenerginiaga.com', 'admin@samudraenerginiaga.com', 'Semarang'),
+    ('Petro Perkasa Indonesia', 'Negeri', 'petroperkasaindonesia.com', 'cs@pt-ppi.com', 'Balikpapan'),
+    ('Petro Artha Indo', 'Negeri', 'en.petroarthaindo.web.indotrading.com', 'admin@petroarthaindo.com', 'Palembang'),
+    ('Duta Bahari Menara Lines', 'Negeri', 'ptdml.com', 'pemasaran@ptdml.com', 'Banjarmasin'),
+    ('Palaran Indah Lestari', 'Negeri', 'palaranlestarigroup.com', 'marketing@palaranlestarigroup.com', 'Samarinda'),
+    ('Cosmic Indonesia', 'Negeri', 'pt_cosmic_indonesia.indonetwork.co.id', 'support@indonetwork.co.id', 'Batam'),
+    ('Astiku Sakti', 'Negeri', 'astikusakti.com', 'csc@astikusakti.com', 'Balikpapan'),
+    ('Jagad Energy', 'Negeri', 'jadaggroup.net', 'info@jagadgroup.net', 'Batam')
+
+INSERT INTO 
+    KERJASAMA (
+        JenisKerjaSama
+    )
+VALUES
+    ('Merger'),
+    ('Konsolidasi'),
+    ('Joint Venture'),
+    ('Waralaba');
+
+-- INSERT INTO
+--     menjalin (
+--         KdPerusahaan, KdKS,
+--         StatusKeanggotaan
+--     )
+-- VALUES 
+--     (1, 2, 'Anggota'),
+--     (23, 1, 'Induk'),
+--     (53, 3, 'Anggota'),
+--     (32, 2, 'Anggota'),
+--     (65, 1, 'Induk'),
+--     (12, 2, 'Anggota'),
+--     (35, 2, 'Anggota'),
+--     (13, 4, 'Anggota'),
+--     (35, 4, 'Anggota'),
+--     (11, 2, 'Anggota'),
+--     (24, 3, 'Anggota'),
+--     (56, 3, 'Anggota'),
+--     (45, 1, 'Anggota'),
+--     (35, 1, 'Induk'),
+--     (66, 1, 'Induk'),
+--     (34, 3, 'Anggota'),
+--     (64, 3, 'Anggota'),
+--     (39, 4, 'Anggota'),
+--     (40, 4, 'Anggota'),
+--     (13, 4, 'Anggota'),
+--     (45, 2, 'Anggota'),
+--     (67, 1, 'Induk'),
+--     (50, 2, 'Anggota'),
+--     (10, 2, 'Anggota'),
+--     (2, 1, 'Anggota'),
+--     (7, 3, 'Anggota'),
+--     (28, 4, 'Anggota'),
+--     (43, 1, 'Induk'),
+--     (47, 2, 'Anggota'),
+--     (63, 1, 'Anggota'),
+--     (21, 2, 'Anggota'),
+--     (42, 3, 'Anggota'),
+--     (53, 4, 'Anggota'),
+--     (22, 5, 'Anggota'),
+--     (21, 3, 'Anggota');
 
 GO
 -- !SECTION Done || Insert data
