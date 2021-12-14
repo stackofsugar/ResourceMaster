@@ -11,7 +11,7 @@ const sqlServerConnConfig = {
     port: 1433,
     user: "ResourceMasterApp",
     password: "ResourceMaster1234567890",
-    database: "BikeStore",
+    database: "ResourceMaster",
     connectionTimeout: 5000,
     options: {
         encrypt: false,

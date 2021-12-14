@@ -53,4 +53,37 @@ $(() => {
         e.preventDefault();
         ipcRenderer.send("win:err-test");
     });
+
+    // Show JSON of Query Result
+    ipcRenderer.on("sqlres:main:send", (e, payload) => {
+        $("#sql-result-json").html("");
+        console.log(payload);
+
+        let htmlstring;
+        let arr = [];
+
+        htmlstring = "<table>";
+        htmlstring += "<thead><tr>";
+        for (const k in payload.recordset[0]) {
+            htmlstring += `<th>${k}</th>`;
+            arr.push(k);
+        }
+        htmlstring += "</tr></thead><tbody>";
+
+        for (let obj of payload.recordset) {
+            htmlstring += "<tr>";
+            for (let k of arr) {
+                htmlstring += `<td>${obj[k]}</td>`;
+            }
+            htmlstring += "</tr>";
+        }
+
+        htmlstring += "</tbody></table>";
+        $("#sql-result-json").html(htmlstring);
+        console.log(htmlstring);
+    });
+
+    ipcRenderer.on("sqlres:main:rejected", (e) => {
+        $("#sql-result-json").html("");
+    });
 });

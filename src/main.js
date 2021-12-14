@@ -75,9 +75,10 @@ ipcMain.on("sql:request", (e, payload) => {
     console.log(payload);
     runSQLQuery(payload)
         .then((result) => {
-            console.log(result);
+            mainWindow.webContents.send("sqlres:main:send", result);
         })
         .catch((err) => {
+            mainWindow.webContents.send("sqlres:main:rejected");
             panic(err, "SQL", "Specified SQL query cannot be run");
         });
 });
